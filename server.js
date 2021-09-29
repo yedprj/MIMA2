@@ -27,26 +27,6 @@ oracledb.getConnection({
 
 });
 
-//클라이언트로부터 insert 요청받으면
-app.post("/insert",function(request, response){
-    console.log(request.body);
-    //오라클에 접속해서 insert문을 실행한다. 
-  var roomId = request.body.rmId;
-  console.log(roomId);
-  var bookingNo = request.body.bookingNo;
-        //쿼리문 실행 
-        conn.execute(`update booking set room_id='${roomId}' where booking_no=${bookingNo}`,function(err,result){
-            if(err){
-                console.log("등록중 에러가 발생했어요!!", err);
-                response.writeHead(500, {"ContentType":"text/html"});
-                response.end("fail!!");
-            }else{
-              console.log("result : ", result);
-                response.writeHead(200, {"ContentType":"text/html"});
-                response.end("success!!");
-            }
-        });
-    });
 
 // oracledb.getConnection(
 //   {
@@ -111,12 +91,9 @@ app.post("/insert",function(request, response){
 // });
 
 
-
-
-
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
-app.use(express.json())
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(express.json());
 app.use(function(req, res, next) {
  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:8020");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -130,7 +107,8 @@ app.get('/', (req, res) => {
   const bookingNo = req.query.bookingNo;
  const roomId = `${uuidV4()}`;
   res.redirect(url.format({
-       pathname: `/${roomId}`,
+    pathname: `/${roomId}`,
+    //이렇게 말고 setAttribute 같이 보내는게 있음 좋을텐데 ㅠㅠ 이럼 패스가 너무길어져서...
     query: {
       roomId: roomId,
       bookingNo:bookingNo
