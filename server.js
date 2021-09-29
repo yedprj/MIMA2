@@ -3,12 +3,14 @@ const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
+const url = require('url');
 
 var oracledb = require('oracledb');
 var dbConfig = require('./config/dbConfig');
 //oracle auto commit
 oracledb.autoCommit = true;
-
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended:true}));
 
 var conn;
 //오라클 접속
@@ -31,9 +33,9 @@ app.post("/insert",function(request, response){
     //오라클에 접속해서 insert문을 실행한다. 
   var roomId = request.body.rmId;
   console.log(roomId);
-    var bookingNo = 1;
+  var bookingNo = request.body.bookingNo;
         //쿼리문 실행 
-        conn.execute(`insert into consultation(room_id) values(${roomId}) where booking_no=${bookingNo}`,function(err,result){
+        conn.execute(`update booking set room_id='${roomId}' where booking_no=${bookingNo}`,function(err,result){
             if(err){
                 console.log("등록중 에러가 발생했어요!!", err);
                 response.writeHead(500, {"ContentType":"text/html"});
@@ -115,16 +117,51 @@ app.post("/insert",function(request, response){
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.json())
+app.use(function(req, res, next) {
+ res.header("Access-Control-Allow-Origin", "http://127.0.0.1:8020");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+    next();
+});
 
 //로컬호스트3000번으로 가면 uuidV4로 진료방 uid를 만들어서 redirect 해줌
 app.get('/', (req, res) => {
-  res.redirect(`/${uuidV4()}`)
+ 
+  const bookingNo = req.query.bookingNo;
+ const roomId = `${uuidV4()}`;
+  res.redirect(url.format({
+       pathname: `/${roomId}`,
+    query: {
+      roomId: roomId,
+      bookingNo:bookingNo
+    }
+  })
+);
+  
+  //res.redirect(`/${uuidV4()}`)
 })
+
 
 //진료방으로 들어오면 roomId를 파라미터로 보내줌
 app.get('/:room', (req, res) => {
-  res.render('room', { roomId: req.params.room })
+  var roomId = req.query.roomId;
+  var bookingNo = req.query.bookingNo;
+ 
+  var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
+ 
+   conn.execute(sql, function(err,result){
+            if(err){
+                console.log("등록중 에러가 발생했어요!!", err);
+                
+            }else{
+              console.log("result : ", result);
+            }
+        });
+
+  res.render('room', { roomId: req.query.roomId, bookingNo: req.query.bookingNo })
 })
+
+
 
 
 

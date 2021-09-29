@@ -6,6 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script>
     const ROOM_ID = "<%= roomId %>"
+    const BOOKING_NO="<%= bookingNo%>"
+    console.log(ROOM_ID+'room page');
   </script>
   <script defer src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
   <script src="/socket.io/socket.io.js" defer></script>
@@ -30,18 +32,26 @@
   <button id="insertRmIdBtn" onclick="frmSubmit()">환자부르기</button>
 
 <form id="uidInsertFrm" name="" method="POST">
-  <input type="hidden" id="rmId" name="rmId">
+  <input type="text" id="rmId" name="rmId" value="<%= roomId %>">
+  <input type="text" id="bookingNo" name="bookingNo" value="<%= bookingNo%>">
 </form>
 
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <!-- 스크립트 나중에 위에꺼랑 합치는 방법을 찾아봅시다 -->
 <script>
+
+
 const uidInsertFrm = document.getElementById('uidInsertFrm');
-function frmSubmit(){
-  // alert('clicked')
-  uidInsertFrm.action="/insert"; //서버 유알엘
-  uidInsertFrm.value=ROOM_ID;
-  // uidInsertFrm.submit();
+function frmSubmit(e){
+  e.preventDefault();
+  alert('clicked')
+  alert("예약번호 "+ BOOKING_NO +"번 환자에게 주소를 알립니다.");
+  uidInsertFrm.rmId.value=ROOM_ID;
+  uidInsertFrm.action="#"; //서버 유알엘
+  uidInsertFrm.submit();
 }
  
 </script>
