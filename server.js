@@ -206,7 +206,7 @@ app.get('/:room', (req, res) => {
 
 //환자 정보 조회 버튼 누르면 새 윈도우를 띄워줌
 app.get('/searchPt', (req, res) => {
- 
+ //
   res.render('views/searchPt');
 })
 
