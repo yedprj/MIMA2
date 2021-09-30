@@ -9,6 +9,7 @@ var oracledb = require('oracledb');
 var dbConfig = require('./config/dbConfig');
 //oracle auto commit
 oracledb.autoCommit = true;
+oracledb.outFormat = oracledb.OBJECT;
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -124,7 +125,8 @@ app.get('/', (req, res) => {
 app.get('/:room', (req, res) => {
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
- 
+
+  //예약 테이블에 방의 고유 아이디를 업데이트
   var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
  
    conn.execute(sql, function(err,result){
@@ -132,14 +134,66 @@ app.get('/:room', (req, res) => {
                 console.log("등록중 에러가 발생했어요!!", err);
                 
             }else{
+              
               console.log("result : ", result);
+              console.log("_____방아이디 인서트 완료______");
             }
         });
 
-  res.render('room', { roomId: req.query.roomId, bookingNo: req.query.bookingNo })
+  //고유아이디 업데이트 이후, 예약 번호를 사용해서 환자 정보를 검색해서 진료기록 폼에 넣어줌
+   var sql2=`select 
+   a.member_no,
+   a.NAME,
+   a.IDENTIFY_NO,
+   a.GENDER,
+   b.PAST_HX,
+   b.PRE_SELF_AX,
+   b.TOPIC,
+   b.MED_DELIVERY
+from member a join patients b
+on (a.member_no=b.member_no)
+where a.member_no=(select pt_no from booking where booking_no =${bookingNo})`;     
+var row;
+var ptName;
+var ptIdNo;
+var ptGen;
+var ptMedDelivery;
+conn.execute(sql2, function(err, result){
+  if(err){
+      console.log("값을 가져오는 중 에러가 발생했어요!!", err);
+      
+  }else{
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    row = result.rows[0];
+    ptMNo=row.MEMBER_NO;
+    ptName=row.NAME;
+    ptIdNo=row.IDENTIFY_NO;
+    ptGen=row.GENDER;
+    ptMedDelivery=row.MED_DELIVERY;
+
+    //페이지 렌더+ 정보 보내기
+    res.render('room', { 
+      roomId: req.query.roomId,
+      bookingNo: req.query.bookingNo,
+      ptMNo:ptMNo,
+      ptName:ptName,
+      ptGen:ptGen,
+      ptIdNo:ptIdNo,
+      ptMedDelivery:ptMedDelivery
+    })
+  }
+});  
 })
 
+//환자 정보 조회 버튼 누르면 새 윈도우를 띄워줌
+app.get('/searchPt', (req, res) => {
+  var ptNo = req.query.ptNo;
+  console.log(ptNo);
 
+  res.redirect(`/searchPt`);
+  
+
+})
 
 
 

@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script>
-    const ROOM_ID = "<%= roomId %>"
-    const BOOKING_NO="<%= bookingNo%>"
+    const ROOM_ID = "<%= roomId %>";
+    const BOOKING_NO="<%= bookingNo%>";
+    const PTMNO="<%=ptMNo%>";
     console.log(ROOM_ID+'room page');
   </script>
 
@@ -104,15 +105,17 @@
        </div>
        <div class="main__form_window">
          <form>
-          환자정보:<input type="text" value="patient"><br>
-          진료일시:<input type="text" value="date"><br>
+          <input type="hidden" value="date"><br>
+          예약번호: <span id="bookingNo"><%= bookingNo%></span>&nbsp;&nbsp;
+          환자이름:<input width="30px" type="text" value="<%=ptName%>"><br>
+          주민번호:<input type="text" value="<%=ptIdNo%>"><br>
+          성별:<input type="text" value="<%=ptGen%>"><br>
           증상1:<input type="text" value="symptom"><br>
           증상2:<input type="text" value="symptom"><br>
           증상3:<input type="text" value="symptom"><br>
-          증상4:<input type="text" value="symptom"><br>
-          증상5:<input type="text" value="symptom"><br>
           환자평가:
-          <textarea name="" id="" cols="30" rows="10"></textarea>
+          <textarea name="" id="" cols="30" rows="10"></textarea><br>
+          환자진단: <input type="text" value="진단명">
           <hr>
           처방
           <br>
@@ -141,7 +144,7 @@
        <div class="main__controls">
         <div class="main__controls__block">
          
-           <div class="main__controls__button">
+           <div id="searchPt" class="main__controls__button">
               <i class="fas fa-shield-alt"></i>
               <span>환자정보 조회</span>
            </div>
@@ -188,23 +191,18 @@
   <input type="hidden" id="bookingNo" name="bookingNo" value="<%= bookingNo%>">
 </form>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <!-- 스크립트 나중에 위에꺼랑 합치는 방법을 찾아봅시다 -->
 <script>
+$(function(){
 
-
-const uidInsertFrm = document.getElementById('uidInsertFrm');
-function frmSubmit(e){
-  e.preventDefault();
-  alert('clicked')
-  alert("예약번호 "+ BOOKING_NO +"번 환자에게 주소를 알립니다.");
-  uidInsertFrm.rmId.value=ROOM_ID;
-  uidInsertFrm.action="#"; //서버 유알엘
-  uidInsertFrm.submit();
-}
+  $('#searchPt').on('click', function(){
+    window.open('http://localhost:3000/searchPt','환자정보조회','width=600,height=800,location=no,status=no,scrollbars=yes');
+  });
+  
+  
+  });//end of page on load
  
 </script>
 </body>
