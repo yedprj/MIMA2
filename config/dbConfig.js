@@ -6,3 +6,4 @@ module.exports =
     password: "mental",
     connectString: "localhost"
 }
+
