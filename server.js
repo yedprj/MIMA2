@@ -5,15 +5,13 @@ const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const url = require('url');
 
+//오라클 접속
 var oracledb = require('oracledb');
 var dbConfig = require('./config/dbConfig');
 //oracle auto commit
 oracledb.autoCommit = true;
 oracledb.outFormat = oracledb.OBJECT;
-
-
 var conn;
-//오라클 접속
 oracledb.getConnection({
     user: dbConfig.user,
     password: dbConfig.password,
@@ -35,14 +33,14 @@ function doRelease(conn) {
     }
     return;
   });
-  }
+  }////db 연걸 끊는 함수 끝
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(function(req, res, next) {
- res.header("Access-Control-Allow-Origin", "http://127.0.0.1:8020");
+  res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
     next();
@@ -61,7 +59,6 @@ app.get('/', (req, res) => {
       }
     })
 );
-  
   //res.redirect(`/${uuidV4()}`)
 })
 
@@ -189,8 +186,6 @@ app.post('/ajax', function (req, res){
 
 
 
-
-
 app.get('/:room', (req, res) => {
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
@@ -211,13 +206,9 @@ app.get('/searchPt', (req, res) => {
   // res.render('searchPt');
 })
 
-// app.get("/api", (res, req)=>{
-//   fetch("/consultatation/ptInformation")
-//   .then((response)=>{
-//     res.send(resonse);
-//     res.end();
-//   })
-// })
+const ptRouter = require('./routes/ptInfo');
+app.use('ptInfo', ptRouter);
+
 
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId) => {

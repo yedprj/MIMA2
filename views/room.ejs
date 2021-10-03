@@ -4,13 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script>
-    const ROOM_ID = "<%= roomId %>";
-    const BOOKING_NO="<%= bookingNo%>";
  
-    console.log(ROOM_ID+'room page');
-  </script>
-
 <!-- for styling  -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
    
@@ -40,6 +34,15 @@
       padding: 8px;
     }
   </style>
+
+
+<script>
+   const ROOM_ID = "<%= roomId %>";
+   const BOOKING_NO = "<%= bookingNo%>";
+
+</script>
+
+
 </head>
 <body>
   <div class="main">
@@ -48,12 +51,12 @@
       <!-- main-left top bar for the information -->
       <div class="main__controls" style="background-color: #453f85;">
         <div class="main__controls__block">
-           <h3>XX님과의 진료 중...</h3>
+           <h3><span id="ptName"></span>님과의 진료 중...</h3>
         </div>
         <div class="main__controls__block">
-           <div class="main__controls__button">
-             진료날짜: 2021/10/26
-             진료시간: 10:00AM
+           <div class="main__controls__button" >
+             <span>진료날짜: </span><span id="consultDate"></span>
+             <span>진료시간: </span><span id="consultTime"></span>~<span id="consultEndTime"></span>
            </div>
          </div>
      </div>
@@ -106,8 +109,7 @@
        <div class="main__form_window">
          <form id =myform method="POST">
           <input type="hidden" value="date"><br>
-          예약번호: <input id="bookingNo" value="<%= bookingNo%>">&nbsp;&nbsp;
-         
+          예약번호: <input id="bookingNo" value="<%= bookingNo%>"><br>
           증상1:<input type="text" value="symptom"><br>
           증상2:<input type="text" value="symptom"><br>
           증상3:<input type="text" value="symptom"><br>
@@ -191,6 +193,52 @@
 <script>
 $(function(){
    
+   // 예약정보 가지오기 s:1003
+    $.ajax({
+      url: 'http://localhost/app/consultation/getBookingInfo',
+      type: 'GET',
+      cache: false,
+      data: {
+         bookingNo: BOOKING_NO
+      },
+      success: function (data) {
+         console.log(data, "from getting bookingInfo");
+         $("#ptName").text(data.name);
+         $("#consultDate").text(data.consultDate);
+         $('#consultTime').text(data.consultTime);
+         //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
+         $('#consultEndTime').text(data.consultTime);
+      },
+      dataType: "json",
+      error: function (jqXHR, textStatus, err) {
+         alert('something went wrong ' + textStatus + ', err ' + err);
+      }
+   })
+
+   //onloading 시 로그인세션정보 가져오기
+   $.ajax({
+      url: 'http://localhost/app/consultation/getBookingInfo',
+      type: 'GET',
+      cache: false,
+      data: {
+         bookingNo: BOOKING_NO
+      },
+      success: function (data) {
+         console.log(data, "from getting bookingInfo");
+         $("#ptName").text(data.name);
+         $("#consultDate").text(data.consultDate);
+         $('#consultTime').text(data.consultTime);
+         //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
+         $('#consultEndTime').text(data.consultTime);
+      },
+      dataType: "json",
+      error: function (jqXHR, textStatus, err) {
+         alert('something went wrong ' + textStatus + ', err ' + err);
+      }
+   })
+
+
+
    //진료기록 인서트 버튼이벤트
    $('#insertRmIdBtn').click(function(e){ 
          //  e.preventDefault();
@@ -219,11 +267,14 @@ $(function(){
   
       //환자정보조회 버튼 누르면 새 창 띄워서 정보를 볼 수 있도록... 
       $('#searchPt').on('click', function(e){
-         alert('clicked')
          e.preventDefault();
          window.open('http://localhost/app/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
+      //s:1003 창 닫기 종료btn
+      $('.leave_meeting').on('click', function(){
+         window.close();
+      })
   });//end of page on load
  
 </script>
