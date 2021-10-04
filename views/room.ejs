@@ -39,7 +39,7 @@
 <script>
    const ROOM_ID = "<%= roomId %>";
    const BOOKING_NO = "<%= bookingNo%>";
-
+   
 </script>
 
 
@@ -51,14 +51,18 @@
       <!-- main-left top bar for the information -->
       <div class="main__controls" style="background-color: #453f85;">
         <div class="main__controls__block">
-           <h3><span id="ptName"></span>님과의 진료 중...</h3>
+           <h3><span id="memberName"></span>님과의 진료 중...</h3>
         </div>
         <div class="main__controls__block">
            <div class="main__controls__button" >
              <span>진료날짜: </span><span id="consultDate"></span>
-             <span>진료시간: </span><span id="consultTime"></span>~<span id="consultEndTime"></span>
            </div>
          </div>
+         <div class="main__controls__block">
+            <div class="main__controls__button" >
+              진료시간: <span id="consultTime"></span>~<span id="consultEndTime"></span>
+            </div>
+          </div>
      </div>
        <div class="main__videos">
           <div id="video-grid">
@@ -75,11 +79,6 @@
                 <i class="fas fa-video"></i>
                 <span>Stop Video</span>
              </div>
-          </div>
-          <div class="main__controls__block">
-            <div class="main__controls__button">
-              <button id="" onclick="frmSubmit()">환자부르기</button>
-           </div>
           </div>
           <div class="main__controls__block">
              <div class="main__controls__button">
@@ -110,33 +109,18 @@
          <form id =myform method="POST">
           <input type="hidden" value="date"><br>
           예약번호: <input id="bookingNo" value="<%= bookingNo%>"><br>
+          환자이름:<input width="30px" type="text" id="ptName" value=""><br>
+          주민번호:<input type="text" value=""><br>
           증상1:<input type="text" value="symptom"><br>
           증상2:<input type="text" value="symptom"><br>
           증상3:<input type="text" value="symptom"><br>
           환자평가:
-          <textarea id="pt_assessment" name="pt_assessment" cols="30" rows="10"></textarea><br>
+          <textarea id="pt_assessment" name="pt_assessment" cols="30" rows="8"></textarea><br>
           환자진단: <input id="pt_diagnosis" name="pt_diagnosis" type="text" value="진단명">
           <hr>
           처방
           <br>
           <textarea id="prescription" name="prescription" cols="30" rows="5"></textarea><br>
-          <!-- <table>
-            <tr>
-             <th>약1</th>
-             <td><input type="text" value="약1"></td>
-             <td width="20"><input type="text" value="수량"></td>
-            </tr>
-            <tr>
-              <th>약2</th>
-              <td><input type="text" value="약1"></td>
-              <td width="20"><input type="text" value="수량"></td>
-             </tr>
-             <tr>
-              <th>약3</th>
-              <td><input type="text" value="약1"></td>
-              <td width="20"><input type="text" value="수량"></td>
-             </tr>
-          </table> -->
           <button>처방전 보내기</button>
 
          </form>
@@ -164,20 +148,14 @@
      </div>
     </div>
 
-
-
 <!-- 
-
-
    <div class="main__right">
       <div class="main__header">
          <h6>Chat</h6>
       </div>
       <div class="main__chat_window">
          <ul class="messages">
-   
          </ul>
-   
       </div>
       <div class="main__message_container">
          <input id="chat_message" type="text" placeholder="Type message here...">
@@ -185,15 +163,34 @@
    </div>
  </div> -->
 
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- 스크립트 나중에 위에꺼랑 합치는 방법을 찾아봅시다 -->
 <script>
 $(function(){
-   
-   // 예약정보 가지오기 s:1003
+   console.log(document.cookie)
+// 쿠키 가져오기 함수
+function getCookie(cName) {
+   cName = cName + '=';
+   var cookieData = document.cookie;
+   var start = cookieData.indexOf(cName);
+   var cValue = '';
+   if(start != -1){
+      start += cName.length;
+      var end = cookieData.indexOf(';', start);
+      if(end == -1)end = cookieData.length;
+      cValue = cookieData.substring(start, end);
+   }
+   return unescape(cValue);
+}
+
+var cookieVal=getCookie('userRole');
+
+if(cookieVal == 'doctor'){
+   $('.main__left').css('flex', 0.7);
+}
+
+// 예약정보 가지오기 s:1003
     $.ajax({
       url: 'http://localhost/app/consultation/getBookingInfo',
       type: 'GET',
@@ -203,7 +200,8 @@ $(function(){
       },
       success: function (data) {
          console.log(data, "from getting bookingInfo");
-         $("#ptName").text(data.name);
+         $("#ptName").val(data.name);
+         $('#memberName').text(data.name);
          $("#consultDate").text(data.consultDate);
          $('#consultTime').text(data.consultTime);
          //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
@@ -215,7 +213,7 @@ $(function(){
       }
    })
 
-   //onloading 시 로그인세션정보 가져오기
+   //환자이름, 예약정보 등 가져오기
    $.ajax({
       url: 'http://localhost/app/consultation/getBookingInfo',
       type: 'GET',
@@ -236,6 +234,16 @@ $(function(){
          alert('something went wrong ' + textStatus + ', err ' + err);
       }
    })
+
+
+   //쿠키벨류가 pt=> not show the insert form
+   if(cookieVal == 'pt'){
+      $('.main__right').css('display', "none");
+      $('.main__left').css('flex', 1);
+      $('#memberName').text('');
+      
+   }
+
 
 
 
