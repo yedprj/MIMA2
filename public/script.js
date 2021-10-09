@@ -32,7 +32,7 @@ navigator.mediaDevices.getUserMedia({
   }, 3000)
     // connectToNewUser(userId, stream)
 
-
+    //스프링에 컨트롤러 불러서 알람 띄워주기
     
   })
 
