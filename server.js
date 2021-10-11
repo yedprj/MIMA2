@@ -68,16 +68,6 @@ app.get('/', (req, res) => {
 })
 
 
-// app.get('/:room', (req, res) => {
-//   var roomId = req.query.roomId;
-//   var bookingNo = req.query.bookingNo;
-//   res.render('room', { 
-//       roomId: req.query.roomId,
-//       bookingNo: req.query.bookingNo
-//     })
-// });  
-
-
 // //진료방으로 들어오면 roomId를 파라미터로 보내줌
 app.get('/:room', (req, res) => {
   var roomId = req.query.roomId;
@@ -128,6 +118,8 @@ app.get('/:room', (req, res) => {
         var ptIdNo;
         var ptGen;
         var ptMedDelivery;
+
+      //환자 정보 가져오는 디비 커넥션
         conn.execute(sql2, function(err, result){
         if(err){
           console.log("환자간단정보 가져오는 중 에러", err);
@@ -144,13 +136,13 @@ app.get('/:room', (req, res) => {
           ptGen=row.GENDER;
           ptMedDelivery=row.MED_DELIVERY;
           //디비연결끊기
-          conn.release(function (err) {
-            console.log('환자 정보 가져온 후 연결끝');
-            if (err) {
-              console.error('환자정보는 가져왔는데?? 못했다??', err.message);
-              return;
-            }
-          });
+          // conn.release(function (err) {
+          //   console.log('환자 정보 가져온 후 연결끝');
+          //   if (err) {
+          //     console.error('환자정보는 가져왔는데? 뭔가 에러가 생김', err);
+          //   }
+          //   return;
+          // });
           //페이지 렌더+ 정보 보내기
           res.render('room', { 
             roomId: req.query.roomId,
@@ -160,12 +152,25 @@ app.get('/:room', (req, res) => {
             ptGen:ptGen,
             ptIdNo:ptIdNo,
             ptMedDelivery:ptMedDelivery
-          })
-
-
+          }).then
         }
 
-        });
+        }); //환자 정보 가져오는 디비 커넥션 끝
+    //환자에게 알려주기 톰켓 웹소켓으로 알람
+  //   $.ajax({
+  //     url: 'http://localhost/app/socket/
+  //     cache: false,
+  //     data: {
+  //        ptIdNo : ptIdNo
+  //     },
+  //     success: function (data) {
+  //        console.log("에코핸들러를 불렀습니다.")
+  //     },
+  //     error: function (jqXHR, textStatus, err) {
+  //        alert('something went wrong ' + textStatus + ', err ' + err);
+  //     }
+  //  })
+
 
 }// end of if role == doctor
   else{
