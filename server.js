@@ -23,31 +23,21 @@ oracledb.getConnection({
     }
     console.log('connected');
     conn = connection;
-});
-
-//db 연걸 끊는 함수
-function doRelease(conn) {
-  conn.release(function (err) {
-    console.log('connection ended');
-    if (err) {
-      console.error('connection ended due to the error', err.message);
-    }
-    return;
-  });
-  }////db 연걸 끊는 함수 끝
+});//오라클연결 끝
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+
+
+app.all(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:80");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
     next();
 });
-
 
 
 var userRole="";
@@ -63,8 +53,7 @@ app.get('/', (req, res) => {
         bookingNo:bookingNo
       }
     })
-);
-  //res.redirect(`/${uuidV4()}`)
+  );
 })
 
 
@@ -76,105 +65,34 @@ app.get('/:room', (req, res) => {
   
   //쿠키정보를 가지고와서 role이 의사면 쿼리입력
   if(userRole == "doctor"){
-    console.log("의사입장");
-    //예약 테이블에 방의 고유 아이디를 업데이트
-  var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
- 
-  conn.execute(sql, function(err,result){
-           if(err){
-               console.log("등록중 에러가 발생했어요!!", err);
-               doRelease(conn);
-               return;
-           }else{
-             console.log("result : ", result);
-             console.log("_____방아이디 인서트 완료______");
-            
-           conn.release(function (err) {
-             console.log('방 아이디 인서트 후 연결끝');
-             if (err) {
-               console.error('방연결 끝내지 못했다??', err.message);
-               return;
-             }
-           });
-           }
-       });
-
-
-        //고유아이디 업데이트 이후, 예약 번호를 사용해서 환자 정보를 검색해서 진료기록 폼에 넣어줌
-        var sql2=`select 
-        a.member_no,
-        a.NAME,
-        a.IDENTIFY_NO,
-        a.GENDER,
-        b.PAST_HX,
-        b.PRE_SELF_AX,
-        b.TOPIC,
-        b.MED_DELIVERY
-        from member a join patients b
-        on (a.member_no=b.member_no)
-        where a.member_no=(select pt_no from booking where booking_no =${bookingNo})`;     
-        var row;
-        var ptName;
-        var ptIdNo;
-        var ptGen;
-        var ptMedDelivery;
-
-      //환자 정보 가져오는 디비 커넥션
-        conn.execute(sql2, function(err, result){
-        if(err){
-          console.log("환자간단정보 가져오는 중 에러", err);
-          doRelease(conn);
-          return;
-        }else{
-          console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          console.log("환자 테이블에 환자가 있어야 나옴")
-          row = result.rows[0];
-        console.log(row);
-          ptMNo=row.MEMBER_NO;
-          ptName=row.NAME;
-          ptIdNo=row.IDENTIFY_NO;
-          ptGen=row.GENDER;
-          ptMedDelivery=row.MED_DELIVERY;
-          //디비연결끊기
-          // conn.release(function (err) {
-          //   console.log('환자 정보 가져온 후 연결끝');
-          //   if (err) {
-          //     console.error('환자정보는 가져왔는데? 뭔가 에러가 생김', err);
-          //   }
-          //   return;
-          // });
-          //페이지 렌더+ 정보 보내기
-          res.render('room', { 
-            roomId: req.query.roomId,
-            bookingNo: req.query.bookingNo,
-            ptMNo:ptMNo,
-            ptName:ptName,
-            ptGen:ptGen,
-            ptIdNo:ptIdNo,
-            ptMedDelivery:ptMedDelivery
-          }).then
-        }
-
-        }); //환자 정보 가져오는 디비 커넥션 끝
-    //환자에게 알려주기 톰켓 웹소켓으로 알람
-  //   $.ajax({
-  //     url: 'http://localhost/app/socket/
-  //     cache: false,
-  //     data: {
-  //        ptIdNo : ptIdNo
-  //     },
-  //     success: function (data) {
-  //        console.log("에코핸들러를 불렀습니다.")
-  //     },
-  //     error: function (jqXHR, textStatus, err) {
-  //        alert('something went wrong ' + textStatus + ', err ' + err);
-  //     }
-  //  })
-
-
-}// end of if role == doctor
-  else{
-    console.log("환자입장")
+      console.log("의사입장");
+      //예약 테이블에 방의 고유 아이디를 업데이트
+    var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
+  
+    conn.execute(sql, function(err,result){
+            if(err){
+                console.log("등록중 에러가 발생했어요!!", err);
+                doRelease(conn);
+                return;
+            }
+              console.log("result : ", result);
+              console.log("_____방아이디 인서트 완료______");
+              
+              conn.close(function (err) {
+                if (err) {
+                  console.error('connection ended due to the error', err.message);
+                }
+              });
+        });
+        
+        res.render('room', { 
+          roomId: req.query.roomId,
+          bookingNo: req.query.bookingNo,        
+        })
+      }
+      // end of if role == doctor
+else if(userRole == "pt"){
+    console.log("환자가 방에 들어왔습니다. ")
     res.render('room', { 
       roomId: req.query.roomId,
       bookingNo: req.query.bookingNo
@@ -202,6 +120,7 @@ app.post('/ajax', function (req, res){
     CONSULT_DATE,
     PT_ASSESSMENT,
     PT_DIAGNOSIS,
+    PT_SYMPTOM,
     BOOKING_NO,
     PT_NO,
     DOC_NO
@@ -209,36 +128,39 @@ app.post('/ajax', function (req, res){
       :CONSULT_DATE,
       :PT_ASSESSMENT,
       :PT_DIAGNOSIS,
+      :PT_SYMPTOM,
       :BOOKING_NO,
       :PT_NO,
       :DOC_NO
     )`;
+
    conn.execute(
-     sql, [consult_date, input.pt_assessment, input.pt_diagnosis, Number(input.booking_no), 2, 3]
+     sql, [consult_date, input.pt_assessment, input.pt_diagnosis, input.pt_symptom, Number(input.booking_no),  Number(input.pt_no),  Number(input.doc_no)]
     , function(err, rows){
       if (err){
         console.log("Error 진료기록 inserting : %s ",err );
+        doRelease(conn);
+        return;
       }
+      doRelease(conn);
       res.send({'success' : true, 'message' : 'Added Successfully'});
   });
  
-});
-
-
-
+});//진료기록 인서트 끝
 
 
 
 //환자 정보 조회 버튼 누르면 새 윈도우를 띄워줌
 app.get('/searchPt', (req, res) => {
   console.log("search pt page");
-  res.writeHead(200, {'contnet-type':'text/html'});
+  res.writeHead(200, {'content-type':'text/html'});
   res.write(ptInformationPage);
   res.end();
   // res.render('searchPt');
 })
 
 const ptRouter = require('./routes/ptInfo');
+const { response } = require('express')
 app.use('ptInfo', ptRouter);
 
 
@@ -258,5 +180,15 @@ io.on('connection', socket => {
     })
   })
 })
+
+
+//db 연걸 끊는 함수
+function doRelease(conn) {
+  conn.close(function (err) {
+    if (err) {
+      console.error('connection ended due to the error', err.message);
+    }
+  });
+  }////db 연걸 끊는 함수 끝
 
   server.listen(3000);

@@ -102,3 +102,7 @@
 .stop {
   color: #e0433b;
 }
+
+textarea {
+  resize: none;
+}
