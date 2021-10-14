@@ -126,7 +126,7 @@
          <table class="table">
             <tr>
                <th width="100"></th>
-               <td>예약번호 :&nbsp;<input id="bookingNo" value="" style="width: 30px;"> 
+               <td>예약번호 :&nbsp;<input id="bookingNo" value="" style="width: 50px;"> 
                   약배달 :&nbsp;<input id="medDelivery" value=""style="width: 30px;">
                </td>
             </tr>
@@ -161,26 +161,25 @@
             </tr>
             <tr>
                <th>증상</th>
-               <td><input id="symptom5" type="text" placeholder="상세증상을 입력해주세요."></td>
+               <td><input id="symptom5" type="text" placeholder="상세증상을 입력해주세요." required></td>
             </tr>
             <tr>
                <th>환자 평가</th>
-               <td><textarea id="pt_assessment" name="pt_assessment" cols="30" rows="4"></textarea></td>
+               <td><textarea id="pt_assessment" name="pt_assessment" cols="30" rows="4" required></textarea></td>
             </tr>
             <tr>
                <th>환자진단</th>
-               <td><input id="pt_diagnosis" name="pt_diagnosis" type="text" value="진단명"></td>
+               <td><input id="pt_diagnosis" name="pt_diagnosis" type="text" value="진단명" required></td>
             </tr>
             <tr>
                <th>처방</th>
                <td><textarea id="prescription" name="prescription" cols="30" rows="3"></textarea></td>
             </tr>
             <tr>
-               
-               <td colspan="2">약배달이 n 인 경우 환자가 직접 처방전을 받아서 약국에 가셔야 합니다. y의 경우 자동으로 약국에 주문이 됩니다.</textarea></td>
+               <td colspan="2">약배달이 n 인 경우 환자가 직접 처방전을 받아서 약국에 가셔야 합니다. y의 경우 자동으로 약국에 주문이 됩니다.</td>
             </tr>
          </table>
-            <button class="btn btn-info" id="presInsertBtn">처방전 보내기</button>
+            <button class="btn btn-info" id="presInsertBtn" type="button" disabled>처방전 보내기</button>
             <br>
             <input type="hidden" id="ptNo" name="ptNo" value="">
             <input type="hidden" id="docNo" name="docNo" value="">
@@ -194,7 +193,7 @@
               <i class="fas fa-shield-alt"></i>
               <button id="searchPt" >환자정보</button>
            </div>
-           <div class="main__controls__button">
+           <div class="main__controls__button" id="searchMed">
               <i class="fas fa-user-friends"></i>
               <span>약검색</span>
            </div>
@@ -248,38 +247,39 @@ var cookieVal=getCookie('userRole');
 
 if(cookieVal == 'doctor'){
    $('.main__left').css('flex', 0.7);
+   
+   // 예약정보 가지오기 s:1003
+   // 수정 1012
+      $.ajax({
+         url: 'http://localhost/app/consultation/getBookingInfo',
+         type: 'GET',
+         cache: false,
+         data: {
+            bookingNo: BOOKING_NO
+         },
+         success: function (data) {
+            console.log(data, "from getting bookingInfo");
+            $('#bookingNo').val(data.bookingNo);
+            $("#ptName").val(data.name);
+            console.log(cookieVal)
+            $('#memberName').text(data.name);
+            let consultdate = new Date(data.consultDate);
+            $("#consultDate").text(consultdate.toDateString());
+            $('#identifyNo').val(data.identifyNo)
+            $('#consultTime').text(data.consultTime);
+            //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
+            $('#consultEndTime').text(data.consultTime);
+            $('#ptNo').val(data.ptNo);
+            $('#docNo').val(data.docNo);
+            $('#medDelivery').val(data.medDelivery);
+         },
+         dataType: "json",
+         error: function (jqXHR, textStatus, err) {
+            alert('something went wrong ' + textStatus + ', err ' + err);
+         }
+      })
 }
 
-// 예약정보 가지오기 s:1003
-// 수정 1012
-   $.ajax({
-      url: 'http://localhost/app/consultation/getBookingInfo',
-      type: 'GET',
-      cache: false,
-      data: {
-         bookingNo: BOOKING_NO
-      },
-      success: function (data) {
-         console.log(data, "from getting bookingInfo");
-         $('#bookingNo').val(data.bookingNo);
-         $("#ptName").val(data.name);
-         console.log(cookieVal)
-         $('#memberName').text(data.name);
-         let consultdate = new Date(data.consultDate);
-         $("#consultDate").text(consultdate.toDateString());
-         $('#identifyNo').val(data.identifyNo)
-         $('#consultTime').text(data.consultTime);
-         //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
-         $('#consultEndTime').text(data.consultTime);
-         $('#ptNo').val(data.ptNo);
-         $('#docNo').val(data.docNo);
-         $('#medDelivery').val(data.medDelivery);
-      },
-      dataType: "json",
-      error: function (jqXHR, textStatus, err) {
-         alert('something went wrong ' + textStatus + ', err ' + err);
-      }
-   })
 
 
    //쿠키벨류가 pt=> not show the insert form
@@ -287,6 +287,31 @@ if(cookieVal == 'doctor'){
       $('.main__right').css('display', "none");
       $('.main__left').css('flex', 1);
       $('#memberName').text('');
+
+      $.ajax({
+         url: 'http://localhost/app/consultation/getSessionInfo',
+         type: 'GET',
+         cache: false,
+         data: {
+            bookingNo: BOOKING_NO
+         },
+         success: function (data) {
+            console.log(data, "from getting bookingInfo");
+            $('#bookingNo').val(data.bookingNo);
+            console.log(cookieVal);
+            $('#memberName').text(data.name);
+            let consultdate = new Date(data.consultDate);
+            $("#consultDate").text(consultdate.toDateString());
+            $('#consultTime').text(data.consultTime);
+            $('#docNo').val(data.docNo);
+           
+         },
+         dataType: "json",
+         error: function (jqXHR, textStatus, err) {
+            alert('something went wrong ' + textStatus + ', err ' + err);
+         }
+      })
+
    }
 
 
@@ -317,7 +342,8 @@ if(cookieVal == 'doctor'){
               success: function(data) {
                           console.log(data);
                           console.log(JSON.stringify(data));
-                        alert("진료기록이 저장되었습니다.")
+                        alert("진료기록이 저장되었습니다.");
+                        $("#presInsertBtn").attr('disabled', false);
                         },
               error: function(jqXHR, textStatus, err){
                    alert('text status '+textStatus+', err '+err);
@@ -330,9 +356,10 @@ if(cookieVal == 'doctor'){
          $('#presInsertBtn').click(function(e){ 
                
             console.log($('#prescription').val());
+            //진료기록 테이블에 저장
                $.ajax({ 
-                  url: 'http://localhost/app/consultation/ajaxMedInsert',
-                  type: 'POST',
+                  url: 'http://localhost/app/consultation/medInsertAjax',
+                  type: 'Get',
                   cache: false, 
                   data: {
                      prescription: $('#prescription').val(),
@@ -340,13 +367,32 @@ if(cookieVal == 'doctor'){
                   },
                   success: function(data) {
                               console.log(data);
-                              console.log(JSON.stringify(data));
                               alert("처방전이 저장되었습니다.")
                               },
                   error: function(jqXHR, textStatus, err){
                         alert('text status '+textStatus+', err '+err);
                      }
-                  })
+                  })//진료기록 테이블에 저장 끝
+                  //약배달 테이블에 저장
+                  alert($("#bookingNo").val());
+                  if( $('#medDelivery').val() == 'y'){
+                     $.ajax({ 
+                     url: 'http://localhost/app/consultation/medDeliveryInsertAjax',
+                     type: 'Get',
+                     cache: false, 
+                     data: {
+                        prescription: $('#prescription').val(),
+                        bookingNo:$("#bookingNo").val()
+                     },
+                     success: function(data) {
+                                 console.log(data);
+                                 alert("약 배달 신청이 완료되었습니다.")
+                                 },
+                     error: function(jqXHR, textStatus, err){
+                           alert('text status '+textStatus+', err '+err);
+                        }
+                     })//약배달 테이블에 저장
+                  }
                });//처방전 인서트 버튼이벤트끝
 
 
@@ -356,8 +402,16 @@ if(cookieVal == 'doctor'){
          window.open('http://localhost/app/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
+      $('#searchMed').on('click', function(e){
+         e.preventDefault();
+         window.open('http://localhost/app/consultation/pillSearch','환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
+      })
+
       //s:1003 창 닫기 종료btn
       $('.leave_meeting').on('click', function(){
+         if(cookieVal=='doctor'){
+            alert("진료가 끝났습니다.");
+         }
          if(cookieVal =='pt'){
             alert("진료가 끝났습니다. 이번 세션은 어떠셨는지 리뷰를 남겨 주세요.");
             window.open('http://localhost/app/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
