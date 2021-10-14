@@ -265,7 +265,8 @@ if(cookieVal == 'doctor'){
          $("#ptName").val(data.name);
          console.log(cookieVal)
          $('#memberName').text(data.name);
-         $("#consultDate").text(data.consultDate);
+         let consultdate = new Date(data.consultDate);
+         $("#consultDate").text(consultdate.toDateString());
          $('#identifyNo').val(data.identifyNo)
          $('#consultTime').text(data.consultTime);
          //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
@@ -357,6 +358,10 @@ if(cookieVal == 'doctor'){
 
       //s:1003 창 닫기 종료btn
       $('.leave_meeting').on('click', function(){
+         if(cookieVal =='pt'){
+            alert("진료가 끝났습니다. 이번 세션은 어떠셨는지 리뷰를 남겨 주세요.");
+            window.open('http://localhost/app/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
+         }
          window.close();
       })
   });//end of page on load

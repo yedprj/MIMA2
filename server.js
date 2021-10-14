@@ -13,17 +13,20 @@ var dbConfig = require('./config/dbConfig');
 oracledb.autoCommit = true;
 oracledb.outFormat = oracledb.OBJECT;
 var conn;
-oracledb.getConnection({
-    user: dbConfig.user,
-    password: dbConfig.password,
-    connectString: dbConfig.connectString
-},function(err,connection){
-    if(err){
-        console.log("접속이 실패했습니다.",err);
-    }
-    console.log('connected');
-    conn = connection;
-});//오라클연결 끝
+
+let dbConnection =function(){
+  oracledb.getConnection({
+      user: dbConfig.user,
+      password: dbConfig.password,
+      connectString: dbConfig.connectString
+  },function(err,connection){
+      if(err){
+          console.log("접속이 실패했습니다.",err);
+      }
+      console.log('connected');
+      conn = connection;
+  });//오라클연결 끝
+}
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -39,6 +42,7 @@ app.all(function(req, res, next) {
     next();
 });
 
+dbConnection();
 
 var userRole="";
 //로컬호스트3000번으로 가면 uuidV4로 진료방 uid를 만들어서 redirect 해줌
@@ -59,6 +63,7 @@ app.get('/', (req, res) => {
 
 // //진료방으로 들어오면 roomId를 파라미터로 보내줌
 app.get('/:room', (req, res) => {
+ 
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
   userRole=req.cookies.userRole;
@@ -68,7 +73,7 @@ app.get('/:room', (req, res) => {
       console.log("의사입장");
       //예약 테이블에 방의 고유 아이디를 업데이트
     var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
-  
+    
     conn.execute(sql, function(err,result){
             if(err){
                 console.log("등록중 에러가 발생했어요!!", err);
@@ -77,13 +82,13 @@ app.get('/:room', (req, res) => {
             }
               console.log("result : ", result);
               console.log("_____방아이디 인서트 완료______");
-              
-              conn.close(function (err) {
-                if (err) {
-                  console.error('connection ended due to the error', err.message);
-                }
-              });
         });
+    conn.close(function (err) {
+      console.log("db disconnected");
+      if (err) {
+        console.error('connection ended due to the error', err.message);
+      }
+    });
         
         res.render('room', { 
           roomId: req.query.roomId,
@@ -115,7 +120,7 @@ app.post('/ajax', function (req, res){
   console.log(consult_date);
  
   //https://stackoverflow.com/questions/33475160/node-js-form-sumit-using-ajax 참고
-  
+  dbConnection();
   var sql =`insert into consultation(
     CONSULT_DATE,
     PT_ASSESSMENT,
@@ -142,9 +147,9 @@ app.post('/ajax', function (req, res){
         doRelease(conn);
         return;
       }
-      doRelease(conn);
       res.send({'success' : true, 'message' : 'Added Successfully'});
   });
+  doRelease(conn);
  
 });//진료기록 인서트 끝
 
@@ -185,6 +190,7 @@ io.on('connection', socket => {
 //db 연걸 끊는 함수
 function doRelease(conn) {
   conn.close(function (err) {
+    console.log("db disconnected");
     if (err) {
       console.error('connection ended due to the error', err.message);
     }
