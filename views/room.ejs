@@ -6,7 +6,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
  
 <!-- for styling  -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
    
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -33,7 +35,19 @@
       object-fit: cover;
       padding: 8px;
     }
-  </style>
+
+    .main__form_window {
+      margin :10px;
+    }
+
+    .table {
+       width : 450px;
+    }
+   </style>
+   
+
+
+
 
 
 <script>
@@ -54,12 +68,12 @@
            <h3><span id="memberName"></span>님과의 진료 중...</h3>
         </div>
         <div class="main__controls__block">
-           <div class="main__controls__button" >
+           <div class="main__controls" >
              <span>진료날짜: </span><span id="consultDate"></span>
            </div>
          </div>
          <div class="main__controls__block">
-            <div class="main__controls__button" >
+            <div class="main__controls" >
               진료시간: <span id="consultTime"></span>~<span id="consultEndTime"></span>
             </div>
           </div>
@@ -102,45 +116,89 @@
            </div>
         </div>
      </div>
-       <div class="main__header">
-          <h5>진료기록 작성</h5>
-       </div>
-       <div class="main__form_window">
-         <form id =myform method="POST">
-          <input type="hidden" value="date"><br>
-          예약번호: <input id="bookingNo" value="<%= bookingNo%>"><br>
-          환자이름:<input width="30px" type="text" id="ptName" value=""><br>
-          주민번호:<input type="text" value=""><br>
-          증상1:<input type="text" value="symptom"><br>
-          증상2:<input type="text" value="symptom"><br>
-          증상3:<input type="text" value="symptom"><br>
-          환자평가:
-          <textarea id="pt_assessment" name="pt_assessment" cols="30" rows="8"></textarea><br>
-          환자진단: <input id="pt_diagnosis" name="pt_diagnosis" type="text" value="진단명">
-          <hr>
-          처방
-          <br>
-          <textarea id="prescription" name="prescription" cols="30" rows="5"></textarea><br>
-          <button>처방전 보내기</button>
+     <!-- 진료기록 작성 폼 시작 -->
+     <div class="main__header" align="center">
+      <h5>진료기록 작성</h5>
+   </div>
+   <div class="main__form_window" align="center">
+      <form id=myform method="POST">
+         <input type="hidden" value="date">
+         <table class="table">
+            <tr>
+               <th width="100"></th>
+               <td>예약번호 :&nbsp;<input id="bookingNo" value="" style="width: 30px;"> 
+                  약배달 :&nbsp;<input id="medDelivery" value=""style="width: 30px;">
+               </td>
+            </tr>
+            <tr>
+               <th>환자이름</th>
+               <td><input width="30px" type="text" id="ptName" value=""></td>
+            </tr>
+            <tr>
+               <th>주민번호</th>
+               <td><input id="identifyNo" type="text" value=""></td>
+            </tr>
+            <tr>
+               <th>증상</th>
+               <td>
+                  <div class="form-check form-check-inline">
+                     <input class="form-check-input" type="checkbox" name="symptom" id="symptom1" value="불안">
+                     <label class="form-check-label" for="symptom1">불안</label>
+                   </div>
+                   <div class="form-check form-check-inline">
+                     <input class="form-check-input" type="checkbox" name="symptom" id="symptom2" value="우울감">
+                     <label class="form-check-label" for="symptom2">우울감</label>
+                   </div>
+                   <div class="form-check form-check-inline">
+                     <input class="form-check-input" type="checkbox" name="symptom" id="symptom3" value="강박">
+                     <label class="form-check-label" for="symptom3">강박</label>
+                   </div>
+                   <div class="form-check form-check-inline">
+                     <input class="form-check-input" type="checkbox" name="symptom" id="symptom4" value="기분변화">
+                     <label class="form-check-label" for="symptom4">기분변화</label>
+                   </div>
+               </td>
+            </tr>
+            <tr>
+               <th>증상</th>
+               <td><input id="symptom5" type="text" placeholder="상세증상을 입력해주세요."></td>
+            </tr>
+            <tr>
+               <th>환자 평가</th>
+               <td><textarea id="pt_assessment" name="pt_assessment" cols="30" rows="4"></textarea></td>
+            </tr>
+            <tr>
+               <th>환자진단</th>
+               <td><input id="pt_diagnosis" name="pt_diagnosis" type="text" value="진단명"></td>
+            </tr>
+            <tr>
+               <th>처방</th>
+               <td><textarea id="prescription" name="prescription" cols="30" rows="3"></textarea></td>
+            </tr>
+            <tr>
+               
+               <td colspan="2">약배달이 n 인 경우 환자가 직접 처방전을 받아서 약국에 가셔야 합니다. y의 경우 자동으로 약국에 주문이 됩니다.</textarea></td>
+            </tr>
+         </table>
+            <button class="btn btn-info" id="presInsertBtn">처방전 보내기</button>
+            <br>
+            <input type="hidden" id="ptNo" name="ptNo" value="">
+            <input type="hidden" id="docNo" name="docNo" value="">
+      </form>
+   </div><!-- 진료기록 작성 폼 끝-->
 
-         </form>
-         
-       </div>
        <div class="main__controls">
         <div class="main__controls__block">
          
            <div class="main__controls__button">
               <i class="fas fa-shield-alt"></i>
-              <button id="searchPt" >환자정보 조회</button>
+              <button id="searchPt" >환자정보</button>
            </div>
            <div class="main__controls__button">
               <i class="fas fa-user-friends"></i>
               <span>약검색</span>
            </div>
-           <div class="main__controls__button">
-              <i class="fas fa-comment-alt"></i>
-              <span>다음진료 예약</span>
-           </div>
+           
            <div class="main__controls__button">
             <button id="insertRmIdBtn">진료결과 저장</button>
          </div>
@@ -162,6 +220,8 @@
       </div>
    </div>
  </div> -->
+
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -191,29 +251,7 @@ if(cookieVal == 'doctor'){
 }
 
 // 예약정보 가지오기 s:1003
-    $.ajax({
-      url: 'http://localhost/app/consultation/getBookingInfo',
-      type: 'GET',
-      cache: false,
-      data: {
-         bookingNo: BOOKING_NO
-      },
-      success: function (data) {
-         console.log(data, "from getting bookingInfo");
-         $("#ptName").val(data.name);
-         $('#memberName').text(data.name);
-         $("#consultDate").text(data.consultDate);
-         $('#consultTime').text(data.consultTime);
-         //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
-         $('#consultEndTime').text(data.consultTime);
-      },
-      dataType: "json",
-      error: function (jqXHR, textStatus, err) {
-         alert('something went wrong ' + textStatus + ', err ' + err);
-      }
-   })
-
-   //환자이름, 예약정보 등 가져오기
+// 수정 1012
    $.ajax({
       url: 'http://localhost/app/consultation/getBookingInfo',
       type: 'GET',
@@ -223,11 +261,19 @@ if(cookieVal == 'doctor'){
       },
       success: function (data) {
          console.log(data, "from getting bookingInfo");
-         $("#ptName").text(data.name);
-         $("#consultDate").text(data.consultDate);
+         $('#bookingNo').val(data.bookingNo);
+         $("#ptName").val(data.name);
+         console.log(cookieVal)
+         $('#memberName').text(data.name);
+         let consultdate = new Date(data.consultDate);
+         $("#consultDate").text(consultdate.toDateString());
+         $('#identifyNo').val(data.identifyNo)
          $('#consultTime').text(data.consultTime);
          //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
          $('#consultEndTime').text(data.consultTime);
+         $('#ptNo').val(data.ptNo);
+         $('#docNo').val(data.docNo);
+         $('#medDelivery').val(data.medDelivery);
       },
       dataType: "json",
       error: function (jqXHR, textStatus, err) {
@@ -241,26 +287,32 @@ if(cookieVal == 'doctor'){
       $('.main__right').css('display', "none");
       $('.main__left').css('flex', 1);
       $('#memberName').text('');
-      
    }
-
-
 
 
    //진료기록 인서트 버튼이벤트
    $('#insertRmIdBtn').click(function(e){ 
-         //  e.preventDefault();
-         
-         //  var data = $('#myform').serializeArray();
-          console.log($('#pt_assessment').val());
+      let str="";
+
+         $("input[name=symptom]:checked").each(function(){
+            var checked = $(this).val();
+            str+=checked+', ';
+         });
+         str+= $('#symptom5').val();
+
           $.ajax({ 
               url: '/ajax',
+              //url-> spring controller 불러서 사용하고 싶은데...
+              //cors origin error : http://localhost/app/consultation/consultInsertAjax
               type: 'POST',
               cache: false, 
               data: {
                  pt_assessment: $('#pt_assessment').val(),
                  pt_diagnosis: $('#pt_diagnosis').val(),
-                 booking_no:$("#bookingNo").val()
+                 booking_no:$("#bookingNo").val(),
+                 pt_symptom: str,
+                 doc_no:$('#docNo').val(),
+                 pt_no:$('#ptNo').val()
               },
               success: function(data) {
                           console.log(data);
@@ -273,6 +325,31 @@ if(cookieVal == 'doctor'){
             })
           });//진료기록 인서트 버튼이벤트끝    
   
+
+          //처방전 인서트 버튼이벤트
+         $('#presInsertBtn').click(function(e){ 
+               
+            console.log($('#prescription').val());
+               $.ajax({ 
+                  url: 'http://localhost/app/consultation/ajaxMedInsert',
+                  type: 'POST',
+                  cache: false, 
+                  data: {
+                     prescription: $('#prescription').val(),
+                     booking_no:$("#bookingNo").val()
+                  },
+                  success: function(data) {
+                              console.log(data);
+                              console.log(JSON.stringify(data));
+                              alert("처방전이 저장되었습니다.")
+                              },
+                  error: function(jqXHR, textStatus, err){
+                        alert('text status '+textStatus+', err '+err);
+                     }
+                  })
+               });//처방전 인서트 버튼이벤트끝
+
+
       //환자정보조회 버튼 누르면 새 창 띄워서 정보를 볼 수 있도록... 
       $('#searchPt').on('click', function(e){
          e.preventDefault();
@@ -281,6 +358,10 @@ if(cookieVal == 'doctor'){
 
       //s:1003 창 닫기 종료btn
       $('.leave_meeting').on('click', function(){
+         if(cookieVal =='pt'){
+            alert("진료가 끝났습니다. 이번 세션은 어떠셨는지 리뷰를 남겨 주세요.");
+            window.open('http://localhost/app/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
+         }
          window.close();
       })
   });//end of page on load
