@@ -107,7 +107,7 @@
       <div class="main__controls" style="background-color: #453f85;">
         <div class="main__controls__block">
           <div class="main__controls__button">
-            남은 진료 시간은....분 입니다.
+            <span id='text2'></span>
          </div>
         </div>
         <div class="main__controls__block">
@@ -243,6 +243,53 @@ function getCookie(cName) {
    return unescape(cValue);
 }
 
+//타이머
+function startTimer(duration, display) {
+   var timer = duration, minutes, seconds;
+   var interval = setInterval(function () {
+      minutes = parseInt(timer / 60, 10)
+      seconds = parseInt(timer % 60, 10);
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      display.textContent = "남은 진료 시간은 "+ minutes + ":" + seconds +"입니다.";
+
+      if (--timer < 0) {
+         timer = duration;
+      }
+      if (timer === 0) {
+         clearInterval(interval);
+         display.textContent = "진료 세션이 끝났습니다.!";
+      }
+   }, 1000);
+}
+
+
+
+   
+      var minutes = 50;
+     
+      var fiveMinutes = (60 * minutes) - 1
+      var display = document.getElementById('text2');
+      startTimer(fiveMinutes, display);
+   
+
+
+      //스트링->데이트
+      function toDate(dStr, format) {
+      now = new Date();
+      if (format == "hh:mm") {
+         now.setHours(dStr.substr(0, dStr.indexOf(":")));
+         now.setMinutes(dStr.substr(dStr.indexOf(":") + 1));
+         now.setSeconds(0);
+         return now;
+      } else
+         return "Invalid Format";
+   }
+  
+
+
 var cookieVal=getCookie('userRole');
 
 if(cookieVal == 'doctor'){
@@ -267,6 +314,14 @@ if(cookieVal == 'doctor'){
             $("#consultDate").text(consultdate.toDateString());
             $('#identifyNo').val(data.identifyNo)
             $('#consultTime').text(data.consultTime);
+
+            let time = data.consultTime;
+            var b = toDate(time, "hh:mm");
+            console.log("time test",b);
+
+
+
+
             //진료끝나는 시간을 구해야지 남은 시간을 구할 수 있는데 어떻게 하면 좋을까유...?
             $('#consultEndTime').text(data.consultTime);
             $('#ptNo').val(data.ptNo);
