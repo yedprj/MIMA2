@@ -5,7 +5,6 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const url = require('url');
-const hostname = '3.37.209.146';
 
 
 //오라클 접속
@@ -199,6 +198,4 @@ function doRelease(conn) {
   });
   }////db 연걸 끊는 함수 끝
 
-server.listen(3000, hostname, () => {
-  console.log(`server running at http://${hostname}:${port}/`);
-  });
+  server.listen(3000);
