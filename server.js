@@ -5,6 +5,8 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const url = require('url');
+const hostname = '3.37.209.146';
+
 
 //오라클 접속
 var oracledb = require('oracledb');
@@ -36,7 +38,7 @@ app.use(express.urlencoded({extended:true}));
 
 
 app.all(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:80");
+  res.header("Access-Control-Allow-Origin", "http://3.37.209.146:8080");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
     next();
@@ -197,4 +199,6 @@ function doRelease(conn) {
   });
   }////db 연걸 끊는 함수 끝
 
-  server.listen(3000);
+server.listen(3000, hostname, () => {
+  console.log(`server running at http://${hostname}:${port}/`);
+  });
