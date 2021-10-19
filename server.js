@@ -5,7 +5,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const url = require('url');
-const hostname = '3.37.209.146';
+const hostname = '127.0.0.1';
 
 
 //오라클 접속
