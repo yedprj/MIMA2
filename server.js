@@ -57,7 +57,8 @@ app.get('/', (req, res) => {
       query: {
         roomId: roomId,
         bookingNo:bookingNo
-      }
+      },
+      hostname: '3.37.209.146'
     })
   );
 })
