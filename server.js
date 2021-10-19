@@ -200,5 +200,5 @@ function doRelease(conn) {
   }////db 연걸 끊는 함수 끝
 
 server.listen(3000, hostname, () => {
-  console.log(`server running at http://${hostname}:${port}/`);
+  console.log(`server running at http://${hostname}:3000/`);
   });
