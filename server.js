@@ -51,16 +51,15 @@ app.get('/', (req, res) => {
   const bookingNo = req.query.bookingNo;
   const roomId = `${uuidV4()}`;
   res.redirect(
-    'test.com'
-    // url.format({
-    //   pathname: `/${roomId}`,
-    //   //이렇게 말고 setAttribute 같이 보내는게 있음 좋을텐데 ㅠㅠ 이럼 보안이....
-    //   query: {
-    //     roomId: roomId,
-    //     bookingNo:bookingNo
-    //   },
-    //   hostname: '3.37.209.146'
-    // })
+    url.format({
+      pathname: `/${roomId}`,
+      //이렇게 말고 setAttribute 같이 보내는게 있음 좋을텐데 ㅠㅠ 이럼 보안이....
+      query: {
+        roomId: roomId,
+        bookingNo:bookingNo
+      },
+      hostname: '3.37.209.146'
+    })
   );
 })
 
