@@ -298,7 +298,7 @@ if(cookieVal == 'doctor'){
    // 예약정보 가지오기 s:1003
    // 수정 1012
       $.ajax({
-         url: 'http://localhost/app/consultation/getBookingInfo',
+         url: 'http://3.37.209.146:8080/app/consultation/getBookingInfo',
          type: 'GET',
          cache: false,
          data: {
@@ -344,7 +344,7 @@ if(cookieVal == 'doctor'){
       $('#memberName').text('');
 
       $.ajax({
-         url: 'http://localhost/app/consultation/getSessionInfo',
+         url: 'http://3.37.209.146:8080/app/consultation/getSessionInfo',
          type: 'GET',
          cache: false,
          data: {
@@ -413,7 +413,7 @@ if(cookieVal == 'doctor'){
             console.log($('#prescription').val());
             //진료기록 테이블에 저장
                $.ajax({ 
-                  url: 'http://localhost/app/consultation/medInsertAjax',
+                  url: 'http://3.37.209.146:8080/app/consultation/medInsertAjax',
                   type: 'Get',
                   cache: false, 
                   data: {
@@ -432,7 +432,7 @@ if(cookieVal == 'doctor'){
                   alert($("#bookingNo").val());
                   if( $('#medDelivery').val() == 'y'){
                      $.ajax({ 
-                     url: 'http://localhost/app/consultation/medDeliveryInsertAjax',
+                     url: 'http://3.37.209.146:8080/app/consultation/medDeliveryInsertAjax',
                      type: 'Get',
                      cache: false, 
                      data: {
@@ -454,12 +454,12 @@ if(cookieVal == 'doctor'){
       //환자정보조회 버튼 누르면 새 창 띄워서 정보를 볼 수 있도록... 
       $('#searchPt').on('click', function(e){
          e.preventDefault();
-         window.open('http://localhost/app/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
+         window.open('http://3.37.209.146:8080/app/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
       $('#searchMed').on('click', function(e){
          e.preventDefault();
-         window.open('http://localhost/app/consultation/pillSearch','환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
+         window.open('http://3.37.209.146:8080/app/consultation/pillSearch','환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
       //s:1003 창 닫기 종료btn
@@ -469,7 +469,7 @@ if(cookieVal == 'doctor'){
          }
          if(cookieVal =='pt'){
             alert("진료가 끝났습니다. 이번 세션은 어떠셨는지 리뷰를 남겨 주세요.");
-            window.open('http://localhost/app/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
+            window.open('http://3.37.209.146:8080/app/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
          }
          window.close();
       })
