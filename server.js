@@ -37,7 +37,7 @@ app.use(express.urlencoded({extended:true}));
 
 
 app.all(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://3.37.209.146:8080");
+  res.header("Access-Control-Allow-Origin", "https://3.37.209.146:8080");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
     next();
