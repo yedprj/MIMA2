@@ -132,7 +132,7 @@ app.post('/ajax', function (req, res){
     PT_NO,
     DOC_NO
     ) values(
-      :CONSULT_DATE,
+      TO_DATE(:CONSULT_DATE, 'yyyy/mm/dd'),
       :PT_ASSESSMENT,
       :PT_DIAGNOSIS,
       :PT_SYMPTOM,
