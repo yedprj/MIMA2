@@ -2,9 +2,25 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const app = express()
 const server = require('http').Server(app)
+const HTTPS = require('https');
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const url = require('url');
+
+try {
+  const option = {
+    ca: fs.readFileSync('/etc/letsencrypt/live/mima.miraclemind.kro.kr/fullchain.pem'),
+    key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/mima.miraclemind.kro.kr/privkey.pem'), 'utf8').toString(),
+    cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/mima.miraclemind.kro.kr/cert.pem'), 'utf8').toString(),
+  };
+
+  HTTPS.createServer(option, app).listen(sslport, () => {
+    colorConsole.success(`[HTTPS] Soda Server is started on port ${colors.cyan(sslport)}`);
+  });
+} catch (error) {
+  colorConsole.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
+  colorConsole.warn(error);
+}
 
 
 //오라클 접속
@@ -37,7 +53,7 @@ app.use(express.urlencoded({extended:true}));
 
 
 app.all(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://3.37.209.146:8080");
+  res.header("Access-Control-Allow-Origin", "https://mima.miraclemind.kro.kr:8080/");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
     next();
