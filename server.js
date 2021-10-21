@@ -2,6 +2,7 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const app = express()
 const server = require('http').Server(app)
+const fs = require('fs');
 const HTTPS = require('https');
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
