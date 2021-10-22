@@ -21,7 +21,7 @@ try {
   });
 } catch (error) {
   console.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
-  console.warn(error);
+  console.error(error);
 }
 
 
