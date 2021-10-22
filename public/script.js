@@ -1,4 +1,4 @@
-const socket = io('/')
+const socket = io('https://mima.miraclemind.kro.kr:443')
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
   host: '/',
@@ -30,7 +30,7 @@ navigator.mediaDevices.getUserMedia({
      setTimeout(() => {
     // user joined
     connectToNewUser(userId, stream)
-  }, 3000)
+  }, 443)
     // connectToNewUser(userId, stream)
 
     //스프링에 컨트롤러 불러서 알람 띄워주기
