@@ -17,7 +17,7 @@ try {
   };
 
   HTTPS.createServer(option, app).listen(443, () => {
-    console.success(`[HTTPS] Soda Server is started on port ${443}`);
+    console.success(`[HTTPS] Server is started on port ${443}`);
   });
 } catch (error) {
   console.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
@@ -55,7 +55,7 @@ app.use(express.urlencoded({extended:true}));
 
 
 app.all(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://mima.miraclemind.kro.kr:8080/");
+  res.header("Access-Control-Allow-Origin", "http://mima.miraclemind.kro.kr:8080/");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
     next();

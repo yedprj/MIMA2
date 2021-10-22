@@ -298,7 +298,7 @@ if(cookieVal == 'doctor'){
    // 예약정보 가지오기 s:1003
    // 수정 1012
       $.ajax({
-         url: 'https://mima.miraclemind.kro.kr/app/consultation/getBookingInfo',
+         url: 'http://mima.miraclemind.kro.kr/consultation/getBookingInfo',
          type: 'GET',
          cache: false,
          data: {
@@ -344,7 +344,7 @@ if(cookieVal == 'doctor'){
       $('#memberName').text('');
 
       $.ajax({
-         url: 'https://mima.miraclemind.kro.kr/app/consultation/getSessionInfo',
+         url: 'http://mima.miraclemind.kro.kr/consultation/getSessionInfo',
          type: 'GET',
          cache: false,
          data: {
@@ -411,7 +411,7 @@ if(cookieVal == 'doctor'){
             console.log($('#prescription').val());
             //진료기록 테이블에 저장
                $.ajax({ 
-                  url: 'https://mima.miraclemind.kro.kr/app/consultation/medInsertAjax',
+                  url: 'http://mima.miraclemind.kro.kr/consultation/medInsertAjax',
                   type: 'Get',
                   cache: false, 
                   data: {
@@ -430,7 +430,7 @@ if(cookieVal == 'doctor'){
                   alert($("#bookingNo").val());
                   if( $('#medDelivery').val() == 'y'){
                      $.ajax({ 
-                     url: 'https://mima.miraclemind.kro.kr/app/consultation/medDeliveryInsertAjax',
+                     url: 'http://mima.miraclemind.kro.kr/consultation/medDeliveryInsertAjax',
                      type: 'Get',
                      cache: false, 
                      data: {
@@ -452,12 +452,12 @@ if(cookieVal == 'doctor'){
       //환자정보조회 버튼 누르면 새 창 띄워서 정보를 볼 수 있도록... 
       $('#searchPt').on('click', function(e){
          e.preventDefault();
-         window.open('https://mima.miraclemind.kro.kr/app/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
+         window.open('http://mima.miraclemind.kro.kr/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
       $('#searchMed').on('click', function(e){
          e.preventDefault();
-         window.open('https://mima.miraclemind.kro.kr/app/consultation/pillSearch','환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
+         window.open('http://mima.miraclemind.kro.kr/consultation/pillSearch','환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
       //s:1003 창 닫기 종료btn
@@ -467,7 +467,7 @@ if(cookieVal == 'doctor'){
          }
          if(cookieVal =='pt'){
             alert("진료가 끝났습니다. 이번 세션은 어떠셨는지 리뷰를 남겨 주세요.");
-            window.open('https://mima.miraclemind.kro.kr/app/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
+            window.open('http://mima.miraclemind.kro.kr/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
          }
          window.close();
       })
