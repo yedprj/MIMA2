@@ -17,7 +17,7 @@ try {
   };
 
   HTTPS.createServer(option, app).listen(443, () => {
-    console.success(`[HTTPS] Server is started on port ${443}`);
+    console.log(`[HTTPS] Server is started on port ${443}`);
   });
 } catch (error) {
   console.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
