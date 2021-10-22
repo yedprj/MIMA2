@@ -1,4 +1,4 @@
-const socket = io.connect('https://mima.miraclemind.kro.kr:443', {secure: true})
+const socket = io.connect('https://mima.miraclemind.kro.kr', {secure: true})
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
   host: '/',
