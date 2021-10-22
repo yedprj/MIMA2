@@ -217,5 +217,5 @@ function doRelease(conn) {
   });
   }////db 연걸 끊는 함수 끝
 
-  // server.listen(443);
+  server.listen(3000);
 
