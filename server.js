@@ -10,7 +10,7 @@ const { v4: uuidV4 } = require('uuid')
 const url = require('url');
 const path=require('path');
 
-try {
+//try {
   const option = {
     ca: fs.readFileSync('/etc/letsencrypt/live/mima.miraclemind.kro.kr/fullchain.pem'),
     key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/mima.miraclemind.kro.kr/privkey.pem'), 'utf8').toString(),
@@ -20,12 +20,12 @@ try {
  const httpsServer= HTTPS.createServer(option, app).listen(443, () => {
     console.log(`[HTTPS] Server is started on port ${443}`);
   });
-  const io = require('socket.io')(httpsServer);
-} catch (error) {
+  
+//} catch (error) {
   console.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
   console.error(error);
-}
-
+//}
+const io = require('socket.io')(httpsServer);
 
 //오라클 접속
 var oracledb = require('oracledb');
