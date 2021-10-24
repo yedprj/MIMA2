@@ -192,15 +192,16 @@
         <div class="main__controls__block">
          
            <div class="main__controls__button">
-              <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-hospital-user"></i>
               <button id="searchPt" >환자정보</button>
            </div>
            <div class="main__controls__button" id="searchMed">
-              <i class="fas fa-user-friends"></i>
+            <i class="fas fa-pills"></i>
               <span>약검색</span>
            </div>
            
            <div class="main__controls__button">
+            <i class="far fa-save"></i>
             <button id="insertRmIdBtn">진료결과 저장</button>
          </div>
         </div>
@@ -428,7 +429,7 @@ if(cookieVal == 'doctor'){
                         alert('text status '+textStatus+', err '+err);
                      }
                   })//진료기록 테이블에 저장 끝
-                  
+
                   //약배달 테이블에 저장
                   if( $('#medDelivery').val() == 'y'){
                      $.ajax({ 
