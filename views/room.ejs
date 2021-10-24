@@ -428,8 +428,8 @@ if(cookieVal == 'doctor'){
                         alert('text status '+textStatus+', err '+err);
                      }
                   })//진료기록 테이블에 저장 끝
+                  
                   //약배달 테이블에 저장
-                  alert($("#bookingNo").val());
                   if( $('#medDelivery').val() == 'y'){
                      $.ajax({ 
                      url: 'https://mima.miraclemind.kro.kr:8443/app/consultation/medDeliveryInsertAjax',
