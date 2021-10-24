@@ -61,13 +61,12 @@ socket.on('user-disconnected', userId => {
 
 myPeer.on('open', id => {
   console.log(ROOM_ID + ' joined ' + id);
- 
   socket.emit('join-room', ROOM_ID, id);
 })
 
 function connectToNewUser(userId, stream) {
-  const call = myPeer.call(userId, stream)
-  const video = document.createElement('video')
+  const call = myPeer.call(userId, stream);
+  const video = document.createElement('video');
   call.on('stream', userVideoStream => {
     addVideoStream(video, userVideoStream)
   })
@@ -79,10 +78,12 @@ function connectToNewUser(userId, stream) {
 }
 
 function addVideoStream(video, stream) {
+  console.log('making videostream')
   video.srcObject = stream
   video.addEventListener('loadedmetadata', () => {
     video.play()
   })
+  console.log(video);
   videoGrid.append(video)
 }
 

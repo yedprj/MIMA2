@@ -194,8 +194,9 @@ app.use('ptInfo', ptRouter);
 
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId) => {
-    socket.join(roomId)
-    socket.to(roomId).broadcast.emit('user-connected', userId)
+    console.log('방에 누가 들어옴')
+    socket.join(roomId);
+    socket.to(roomId).broadcast.emit('user-connected', userId);
 
   // // messages
   //   socket.on('message', (message) => {
