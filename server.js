@@ -55,7 +55,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors({origin: '*'}));
-app.use('/peerjs', peerServer);
+//app.use('/peerjs', peerServer);
 
 app.all(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://mima.miraclemind.kro.kr:8080/");
