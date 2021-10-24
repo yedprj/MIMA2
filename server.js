@@ -65,7 +65,7 @@ app.all(function(req, res, next) {
 });
 
 
-
+dbConnection();
 var userRole="";
 //로컬호스트3000번으로 가면 uuidV4로 진료방 uid를 만들어서 redirect 해줌
 app.get('/', (req, res) => {
@@ -86,7 +86,7 @@ app.get('/', (req, res) => {
 
 // //진료방으로 들어오면 roomId를 파라미터로 보내줌
 app.get('/:room', (req, res) => {
- dbConnection();
+ 
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
   userRole=req.cookies.userRole;
