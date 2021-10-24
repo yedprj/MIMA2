@@ -1,29 +1,31 @@
+const cors = require('cors');
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const app = express()
 const server = require('http').Server(app)
 const fs = require('fs');
 const HTTPS = require('https');
-const io = require('socket.io')(HTTPS)
+// const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 const url = require('url');
 const path=require('path');
 
-try {
+//try {
   const option = {
     ca: fs.readFileSync('/etc/letsencrypt/live/mima.miraclemind.kro.kr/fullchain.pem'),
     key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/mima.miraclemind.kro.kr/privkey.pem'), 'utf8').toString(),
     cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/mima.miraclemind.kro.kr/cert.pem'), 'utf8').toString(),
   };
 
-  HTTPS.createServer(option, app).listen(443, () => {
+ const httpsServer= HTTPS.createServer(option, app).listen(443, () => {
     console.log(`[HTTPS] Server is started on port ${443}`);
   });
-} catch (error) {
+  
+//} catch (error) {
   console.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
   console.error(error);
-}
-
+//}
+const io = require('socket.io')(httpsServer);
 
 //오라클 접속
 var oracledb = require('oracledb');
@@ -52,7 +54,8 @@ app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
+app.use(cors({origin: '*'}));
+app.use('/peerjs', peerServer);
 
 app.all(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://mima.miraclemind.kro.kr:8080/");
