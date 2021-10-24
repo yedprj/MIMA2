@@ -205,6 +205,7 @@ io.on('connection', socket => {
   // }); 
 
     socket.on('disconnect', () => {
+      console.log('누가 나감')
       socket.to(roomId).broadcast.emit('user-disconnected', userId)
     })
   })
