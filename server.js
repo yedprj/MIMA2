@@ -64,7 +64,7 @@ app.all(function(req, res, next) {
     next();
 });
 
-dbConnection();
+
 
 var userRole="";
 //로컬호스트3000번으로 가면 uuidV4로 진료방 uid를 만들어서 redirect 해줌
@@ -86,7 +86,7 @@ app.get('/', (req, res) => {
 
 // //진료방으로 들어오면 roomId를 파라미터로 보내줌
 app.get('/:room', (req, res) => {
- 
+ dbConnection();
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
   userRole=req.cookies.userRole;
@@ -97,21 +97,21 @@ app.get('/:room', (req, res) => {
       //예약 테이블에 방의 고유 아이디를 업데이트
     var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
     
-    conn.execute(sql, function(err,result){
-            if(err){
-                console.log("등록중 에러가 발생했어요!!", err);
-                doRelease(conn);
-                return;
-            }
-              console.log("result : ", result);
-              console.log("_____방아이디 인서트 완료______");
-        });
-    conn.close(function (err) {
-      console.log("db disconnected");
-      if (err) {
-        console.error('connection ended due to the error', err.message);
-      }
-    });
+      conn.execute(sql, function(err,result){
+              if(err){
+                  console.log("등록중 에러가 발생했어요!!", err);
+                  doRelease(conn);
+                  return;
+              }
+                console.log("result : ", result);
+                console.log("_____방아이디 인서트 완료______");
+          });
+      conn.close(function (err) {
+        console.log("db disconnected");
+        if (err) {
+          console.error('connection ended due to the error', err.message);
+        }
+      });
         
         res.render('room', { 
           roomId: req.query.roomId,
