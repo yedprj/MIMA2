@@ -1,9 +1,10 @@
 const socket = io.connect('https://mima.miraclemind.kro.kr', {secure: true})
 const videoGrid = document.getElementById('video-grid')
-const myPeer = new Peer(undefined, {
-  host: '/',
-  port: '3001'
-})
+// const myPeer = new Peer(undefined, {
+//   host: '/',
+//   port: '3001'
+// })
+const myPeer = new Peer();
 let myVideoStream;
 const myVideo = document.createElement('video')
 myVideo.muted = true
