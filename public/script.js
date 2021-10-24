@@ -22,24 +22,23 @@ navigator.mediaDevices.getUserMedia({
 
   myPeer.on('call', call => {
     call.answer(stream);
-    console.log('new call')
+    console.log('new call');
+
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
       addVideoStream(video, userVideoStream)
     })
-  })
+  }) //end of myPeer.on
 
   socket.on('user-connected', userId => {
     console.log('connected-userId: ' + userId)
-     setTimeout(() => {
-    // user joined
+     
     connectToNewUser(userId, stream)
-  }, 443)
     // connectToNewUser(userId, stream)
 
     //스프링에 컨트롤러 불러서 알람 띄워주기
     
-  })
+  })//end of socket.on
 
     // input value
   let text = $("input");
@@ -54,14 +53,14 @@ navigator.mediaDevices.getUserMedia({
     $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`);
     scrollToBottom()
   })
-})
+})//end of .then
 
 socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close()
 })
 
 myPeer.on('open', id => {
-  console.log(ROOM_ID + '   ' + id);
+  console.log(ROOM_ID + ' joined ' + id);
  
   socket.emit('join-room', ROOM_ID, id);
 })
