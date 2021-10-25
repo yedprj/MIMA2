@@ -95,8 +95,8 @@ app.get('/:room', (req, res) => {
   if(userRole == "doctor"){
       console.log("의사입장");
       //예약 테이블에 방의 고유 아이디를 업데이트
-    var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
-    
+      var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
+      console.log(sql);
       conn.execute(sql, function(err,result){
               if(err){
                   console.log("등록중 에러가 발생했어요!!", err);
@@ -106,6 +106,7 @@ app.get('/:room', (req, res) => {
                 console.log("result : ", result);
                 console.log("_____방아이디 인서트 완료______");
           });
+          
       conn.close(function (err) {
         console.log("db disconnected");
         if (err) {
