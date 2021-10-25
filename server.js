@@ -140,6 +140,7 @@ app.get('/:room', (req, res) => {
 
 //진료기록 입력을 누르면 ajax로 입력
 app.post('/ajax', function (req, res){
+  dbConnection();
   var input = req.body;
 
   let today = new Date();   
@@ -150,7 +151,6 @@ app.post('/ajax', function (req, res){
   console.log(consult_date);
  
   //https://stackoverflow.com/questions/33475160/node-js-form-sumit-using-ajax 참고
-  dbConnection();
   var sql =`insert into consultation(
     CONSULT_DATE,
     PT_ASSESSMENT,
