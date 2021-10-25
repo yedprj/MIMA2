@@ -125,14 +125,14 @@ app.get('/:room', (req, res) => {
                 console.log("result : ", result);
                 console.log("_____방아이디 인서트 완료______");
 
-                conn.close(function (err) {
-                  console.log("db disconnected");
-                  if (err) {
-                    console.error('connection ended due to the error', err.message);
-                  }
-                });
-          });
-
+      });
+              
+      conn.close(function (err) {
+        console.log("db disconnected");
+        if (err) {
+          console.error('connection ended due to the error', err.message);
+        }
+      });
       
         
         res.render('room', { 
