@@ -72,6 +72,43 @@ var userRole="";
 app.get('/', (req, res) => {
   const bookingNo = req.query.bookingNo;
   const roomId = `${uuidV4()}`;
+
+  userRole=req.cookies.userRole;
+
+  
+  //쿠키정보를 가지고와서 role이 의사면 쿼리입력
+  if(userRole == "doctor"){
+    console.log("의사입장");
+    //예약 테이블에 방의 고유 아이디를 업데이트
+  var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
+    
+  conn.execute(sql, function(err,result){
+      console.log("디비에 연결하려고 합니다");
+            if(err){
+                console.log("등록중 에러가 발생했어요!!", err);
+                doRelease(conn);
+                return;
+            }
+              console.log("result : ", result);
+              console.log("_____방아이디 인서트 완료______");
+    });
+            
+    conn.close(function (err) {
+      console.log("db disconnected");
+      if (err) {
+        console.error('connection ended due to the error', err.message);
+      }
+    });
+     
+    }// end of if role == doctor
+else if(userRole == "pt"){
+  console.log("환자가 방에 들어왔습니다. ")
+  // res.render('room', { 
+  //   roomId: req.query.roomId,
+  //   bookingNo: req.query.bookingNo
+  // })
+}
+
   res.redirect(
     url.format({
       pathname: `/${roomId}`,
@@ -90,49 +127,12 @@ app.get('/:room', (req, res) => {
   
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
-  userRole=req.cookies.userRole;
   
-  //쿠키정보를 가지고와서 role이 의사면 쿼리입력
-  if(userRole == "doctor"){
-      console.log("의사입장");
-      //예약 테이블에 방의 고유 아이디를 업데이트
-      res.render('room', { 
-        roomId: req.query.roomId,
-        bookingNo: req.query.bookingNo,        
-      })
 
-    var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
-      
-    conn.execute(sql, function(err,result){
-        console.log("디비에 연결하려고 합니다");
-              if(err){
-                  console.log("등록중 에러가 발생했어요!!", err);
-                  doRelease(conn);
-                  return;
-              }
-                console.log("result : ", result);
-                console.log("_____방아이디 인서트 완료______");
-
-      });
-              
-      conn.close(function (err) {
-        console.log("db disconnected");
-        if (err) {
-          console.error('connection ended due to the error', err.message);
-        }
-      });
-      
-        
-       
-      }
-      // end of if role == doctor
-else if(userRole == "pt"){
-    console.log("환자가 방에 들어왔습니다. ")
-    res.render('room', { 
-      roomId: req.query.roomId,
-      bookingNo: req.query.bookingNo
-    })
-  }
+  res.render('room', { 
+    roomId: req.query.roomId,
+    bookingNo: req.query.bookingNo,        
+  })  
 })//end of 진료방+환자정보 쿼리
 
 
