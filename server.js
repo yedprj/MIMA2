@@ -96,7 +96,7 @@ app.get('/:room', (req, res) => {
   if(userRole == "doctor"){
       console.log("의사입장");
       //예약 테이블에 방의 고유 아이디를 업데이트
-      //var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
+    var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
       
     //   $.ajax({
     //     url: 'https://mima.miraclemind.kro.kr:8443/consultation/rmNoInsert',
