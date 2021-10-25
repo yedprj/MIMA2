@@ -68,7 +68,7 @@ app.all(function(req, res, next) {
 dbConnection();
 var userRole="";
 //로컬호스트3000번으로 가면 uuidV4로 진료방 uid를 만들어서 redirect 해줌
-app.get('/', (req, res) => {
+app.get('/app', (req, res) => {
   const bookingNo = req.query.bookingNo;
   const roomId = `${uuidV4()}`;
   res.redirect(
