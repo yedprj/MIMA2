@@ -89,16 +89,16 @@
           <div class="main__controls__block">
              <div onclick="muteUnmute()" class="main__controls__button main__mute_button">
                 <i class="fas fa-microphone"></i>
-                <span>Mute</span>
+                <span>음소거</span>
              </div>
              <div onclick="playStop()" class="main__controls__button main__video_button" >
                 <i class="fas fa-video"></i>
-                <span>Stop Video</span>
+                <span>카메라 끄기</span>
              </div>
           </div>
           <div class="main__controls__block">
              <div class="main__controls__button">
-                <span class="leave_meeting">Leave Meeting</span>
+                <span class="leave_meeting">나가기</span>
              </div>
           </div>
        </div>
@@ -359,6 +359,7 @@ if(cookieVal == 'doctor'){
             console.log(cookieVal);
             $('#memberName').text(data.name);
             let consultdate = new Date(data.consultDate);
+            console.log(consultdate)
             $("#consultDate").text(consultdate.toDateString());
             $('#consultTime').text(data.consultTime);
             $('#docNo').val(data.docNo);
