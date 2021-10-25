@@ -85,7 +85,7 @@ app.get('/app', (req, res) => {
 
 
 // //진료방으로 들어오면 roomId를 파라미터로 보내줌
-app.get('/:room', (req, res) => {
+app.get('/app/:room', (req, res) => {
  
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
