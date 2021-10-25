@@ -86,7 +86,7 @@ app.get('/', (req, res) => {
 
 // //진료방으로 들어오면 roomId를 파라미터로 보내줌
 app.get('/:room', (req, res) => {
- 
+  dbConnection();
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
   userRole=req.cookies.userRole;
@@ -96,7 +96,7 @@ app.get('/:room', (req, res) => {
       console.log("의사입장");
       //예약 테이블에 방의 고유 아이디를 업데이트
       var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
-      console.log(sql);
+      
       conn.execute(sql, function(err,result){
         console.log("디비에 연결하려고 합니다")
               if(err){
