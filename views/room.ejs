@@ -193,7 +193,7 @@
          
            <div class="main__controls__button">
             <i class="fas fa-hospital-user"></i>
-              <button id="searchPt" >환자정보</button>
+              <span id="searchPt" >환자정보</span>
            </div>
            <div class="main__controls__button" id="searchMed">
             <i class="fas fa-pills"></i>
@@ -202,7 +202,7 @@
            
            <div class="main__controls__button">
             <i class="far fa-save"></i>
-            <button id="insertRmIdBtn">진료결과 저장</button>
+            <span id="insertRmIdBtn">진료결과 저장</span>
          </div>
         </div>
      </div>
@@ -301,7 +301,7 @@ if(cookieVal == 'doctor'){
    // 예약정보 가지오기 s:1003
    // 수정 1012
       $.ajax({
-         url: 'https://mima.miraclemind.kro.kr:8443/app/consultation/getBookingInfo',
+         url: 'https://mima.miraclemind.kro.kr:8443/consultation/getBookingInfo',
          type: 'GET',
          cache: false,
          data: {
@@ -347,7 +347,7 @@ if(cookieVal == 'doctor'){
       $('#memberName').text('');
 
       $.ajax({
-         url: 'https://mima.miraclemind.kro.kr:8443/app/consultation/getSessionInfo',
+         url: 'https://mima.miraclemind.kro.kr:8443/consultation/getSessionInfo',
          type: 'GET',
          cache: false,
          data: {
@@ -414,7 +414,7 @@ if(cookieVal == 'doctor'){
             console.log($('#prescription').val());
             //진료기록 테이블에 저장
                $.ajax({ 
-                  url: 'https://mima.miraclemind.kro.kr:8443/app/consultation/medInsertAjax',
+                  url: 'https://mima.miraclemind.kro.kr:8443/consultation/medInsertAjax',
                   type: 'Get',
                   cache: false, 
                   data: {
@@ -433,7 +433,7 @@ if(cookieVal == 'doctor'){
                   //약배달 테이블에 저장
                   if( $('#medDelivery').val() == 'y'){
                      $.ajax({ 
-                     url: 'https://mima.miraclemind.kro.kr:8443/app/consultation/medDeliveryInsertAjax',
+                     url: 'https://mima.miraclemind.kro.kr:8443/consultation/medDeliveryInsertAjax',
                      type: 'Get',
                      cache: false, 
                      data: {
@@ -455,12 +455,12 @@ if(cookieVal == 'doctor'){
       //환자정보조회 버튼 누르면 새 창 띄워서 정보를 볼 수 있도록... 
       $('#searchPt').on('click', function(e){
          e.preventDefault();
-         window.open('https://mima.miraclemind.kro.kr:8443/app/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
+         window.open('https://mima.miraclemind.kro.kr:8443/consultation/ptInformation?bookingNo='+BOOKING_NO,'환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
       $('#searchMed').on('click', function(e){
          e.preventDefault();
-         window.open('https://mima.miraclemind.kro.kr:8443/app/consultation/pillSearch','환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
+         window.open('https://mima.miraclemind.kro.kr:8443/consultation/pillSearch','환자 정보','width=800,height=600,location=no,status=no,scrollbars=yes');
       })
 
       //s:1003 창 닫기 종료btn
@@ -470,7 +470,7 @@ if(cookieVal == 'doctor'){
          }
          if(cookieVal =='pt'){
             alert("진료가 끝났습니다. 이번 세션은 어떠셨는지 리뷰를 남겨 주세요.");
-            window.open('https://mima.miraclemind.kro.kr:8443/app/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
+            window.open('https://mima.miraclemind.kro.kr:8443/consultation/ptReviewFrm?bookingNo='+BOOKING_NO,'의사 리뷰 남기기');
          }
          window.close();
       })

@@ -58,7 +58,7 @@ app.use(cors({origin: '*'}));
 //app.use('/peerjs', peerServer);
 
 app.all(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://mima.miraclemind.kro.kr:8443/app/");
+  res.header("Access-Control-Allow-Origin", "https://mima.miraclemind.kro.kr:8443/");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
     next();
@@ -68,7 +68,7 @@ app.all(function(req, res, next) {
 dbConnection();
 var userRole="";
 //로컬호스트3000번으로 가면 uuidV4로 진료방 uid를 만들어서 redirect 해줌
-app.get('/app', (req, res) => {
+app.get('/', (req, res) => {
   const bookingNo = req.query.bookingNo;
   const roomId = `${uuidV4()}`;
   res.redirect(
@@ -85,7 +85,7 @@ app.get('/app', (req, res) => {
 
 
 // //진료방으로 들어오면 roomId를 파라미터로 보내줌
-app.get('/app/:room', (req, res) => {
+app.get('/:room', (req, res) => {
  
   var roomId = req.query.roomId;
   var bookingNo = req.query.bookingNo;
