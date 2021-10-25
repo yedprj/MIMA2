@@ -96,25 +96,42 @@ app.get('/:room', (req, res) => {
   if(userRole == "doctor"){
       console.log("의사입장");
       //예약 테이블에 방의 고유 아이디를 업데이트
-      var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
+      //var sql = `update booking set room_id='${roomId}' where booking_no=${bookingNo}`;
       
-      conn.execute(sql, function(err,result){
-        console.log("디비에 연결하려고 합니다");
-              if(err){
-                  console.log("등록중 에러가 발생했어요!!", err);
-                  doRelease(conn);
-                  return;
-              }
-                console.log("result : ", result);
-                console.log("_____방아이디 인서트 완료______");
-          });
-
-      conn.close(function (err) {
-        console.log("db disconnected");
-        if (err) {
-          console.error('connection ended due to the error', err.message);
+      $.ajax({
+        url: 'https://mima.miraclemind.kro.kr:8443/consultation/rmNoInsert',
+        type: 'GET',
+        cache: false,
+        data: {
+           roomId : roomId, 
+           bookingNo: BOOKING_NO
+        },
+        success: function (data) {
+           console.log("인서트완료",data);
+        },
+        dataType: "json",
+        error: function (jqXHR, textStatus, err) {
+           alert('something went wrong ' + textStatus + ', err ' + err);
         }
-      });
+     })
+
+      // conn.execute(sql, function(err,result){
+      //   console.log("디비에 연결하려고 합니다");
+      //         if(err){
+      //             console.log("등록중 에러가 발생했어요!!", err);
+      //             doRelease(conn);
+      //             return;
+      //         }
+      //           console.log("result : ", result);
+      //           console.log("_____방아이디 인서트 완료______");
+      //     });
+
+      // conn.close(function (err) {
+      //   console.log("db disconnected");
+      //   if (err) {
+      //     console.error('connection ended due to the error', err.message);
+      //   }
+      // });
         
         res.render('room', { 
           roomId: req.query.roomId,
